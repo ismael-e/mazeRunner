@@ -1,7 +1,8 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * Created by Silver on 2/23/2017.
@@ -9,19 +10,52 @@ import java.io.FileReader;
 public class MazeImporter {
 
     private String[] mazeArray;
-    private int mazeWidth;
-    private int mazeHeight;
-
-
-
+    List<String> mazeArrayList = new ArrayList<String>();
+    int conditionPoints[] = new int[2];
 
     public MazeImporter(String fileName) throws FileNotFoundException {
 
-
-        File mazeFile = new File("src/"+ fileName);
+        Maze maze = new Maze();
+        File mazeFile = new File("src/mazeFiles/"+ fileName);
         BufferedReader lineReader = new BufferedReader(new FileReader(mazeFile));
+        String readLine;
+
+        //loading maze file from .txt to an array list
+        try {
+            while ((readLine = lineReader.readLine()) != null) {
+                System.out.println(readLine);
+                mazeArrayList.add(readLine);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //loading up maze parameters to create a maze object
+        String sizeLine = mazeArrayList.get(0);
+        String startLine = mazeArrayList.get(1);
+        String endLine = mazeArrayList.get(2);
+
+        Scanner stringScanner = new Scanner(sizeLine);
+        maze.setWidth(stringScanner.nextInt());
+        maze.setHeight(stringScanner.nextInt());
+
+        stringScanner = new Scanner(startLine);
+
+        conditionPoints[0] = stringScanner.nextInt();
+        conditionPoints[1] = stringScanner.nextInt();
+        maze.setStartPoint(conditionPoints);
+
+        stringScanner = new Scanner(endLine);
+        conditionPoints[0] = stringScanner.nextInt();
+        conditionPoints[1] = stringScanner.nextInt();
+        maze.setStartPoint(conditionPoints);
+
+        Iterator mazeIterator = mazeArrayList.listIterator(3);
+        while(mazeIterator.hasNext()){
+            String currentString = (String) mazeIterator.next();
 
 
+        }
     }
 
     public String[] getMazeArray() {
@@ -32,19 +66,4 @@ public class MazeImporter {
         this.mazeArray = mazeArray;
     }
 
-    public int getMazeWidth() {
-        return mazeWidth;
-    }
-
-    public void setMazeWidth(int mazeWidth) {
-        this.mazeWidth = mazeWidth;
-    }
-
-    public int getMazeHeight() {
-        return mazeHeight;
-    }
-
-    public void setMazeHeight(int mazeHeight) {
-        this.mazeHeight = mazeHeight;
-    }
 }
