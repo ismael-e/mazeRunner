@@ -6,7 +6,7 @@ public class Maze {
     private MazeTile[][] mazeArray;
     private MazeTile entranceTile,exitTile;
     private int[] startPoint;
-    private int[][] endPoint;
+    private int[] endPoint;
 
     public int[] getStartPoint() {
         return startPoint;
@@ -16,11 +16,11 @@ public class Maze {
         this.startPoint = startPoint;
     }
 
-    public int[][] getEndPoint() {
+    public int[] getEndPoint() {
         return endPoint;
     }
 
-    public void setEndPoint(int[][] endPoint) {
+    public void setEndPoint(int[] endPoint) {
         this.endPoint = endPoint;
     }
 
@@ -65,4 +65,10 @@ public class Maze {
     }
 
 
+    public void play() {
+        System.out.println("finished");
     }
+
+    public void addTile(MazeTile tile) {
+    }
+}

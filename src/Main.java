@@ -7,6 +7,9 @@ public class Main {
 
         try {
             MazeImporter mazeImporter = new MazeImporter("input.txt");
+            Maze maze = mazeImporter.getMaze();
+            maze.play();
+
         } catch (FileNotFoundException e) {
             System.out.println("IO ERROR > Something went wrong when trying to read the maze file, check the path and file name");
         }

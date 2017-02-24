@@ -4,6 +4,7 @@
 public class MazeTile {
     private int[][] position;
     private String type;
+    boolean visited = false;
 
     public MazeTile(int[][] position, String type) {
         this.position = position;
