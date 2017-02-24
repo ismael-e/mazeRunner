@@ -16,7 +16,7 @@ public class MazeImporter {
     int startPoints[] = new int[2];
     int endPoints[] = new int[2];
     int dimensions[] = new int[2];
-    Maze maze = new Maze();
+    Maze maze;
 
     public MazeImporter(String fileName) throws FileNotFoundException {
 
@@ -72,7 +72,6 @@ public class MazeImporter {
 
                 if(currentCharacter =='1'){
                     //Todo change the wall and tunnel to constants when i get some time
-
                     tileType = "wall";
                 }
                 else{
@@ -80,10 +79,12 @@ public class MazeImporter {
                 }
 
                 MazeTile tile = new MazeTile(tilePosition,tileType);
+
                 mazeTiles.add(tile);
             }
         }
-//        maze.setTiles(mazeTiles);
+        maze = new Maze(dimensions,mazeTiles,startPoints,endPoints);
+
     }
 
     public String[] getMazeArray() {

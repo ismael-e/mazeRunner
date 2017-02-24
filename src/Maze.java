@@ -1,28 +1,21 @@
+import java.util.ArrayList;
+
 /**
  * Created by Silver on 2/23/2017.
  */
 public class Maze {
     private int height,width;
     private MazeTile[][] mazeArray;
-    private MazeTile entranceTile,exitTile;
-    private int[] startPoint;
-    private int[] endPoint;
 
-    public int[] getStartPoint() {
-        return startPoint;
+    private ArrayList<MazeTile> mazeTiles;
+
+    public Maze(int[] dimension, ArrayList<MazeTile> mazeTiles, int[] startPoints, int[] endPoints) {
+        this.height = dimension[1];
+        this.width = dimension[0];
+        this.mazeTiles = mazeTiles;
+
     }
 
-    public void setStartPoint(int[] startPoint) {
-        this.startPoint = startPoint;
-    }
-
-    public int[] getEndPoint() {
-        return endPoint;
-    }
-
-    public void setEndPoint(int[] endPoint) {
-        this.endPoint = endPoint;
-    }
 
     public int getHeight() {
         return height;
@@ -48,27 +41,15 @@ public class Maze {
         this.mazeArray = mazeArray;
     }
 
-    public MazeTile getEntranceTile() {
-        return entranceTile;
-    }
-
-    public void setEntranceTile(MazeTile entranceTile) {
-        this.entranceTile = entranceTile;
-    }
-
-    public MazeTile getExitTile() {
-        return exitTile;
-    }
-
-    public void setExitTile(MazeTile exitTile) {
-        this.exitTile = exitTile;
-    }
-
 
     public void play() {
         System.out.println("finished");
     }
 
     public void addTile(MazeTile tile) {
+    }
+
+    public void setTiles(ArrayList<MazeTile> mazeTiles) {
+        this.mazeTiles = mazeTiles;
     }
 }
