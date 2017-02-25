@@ -8,6 +8,14 @@ public class MazeTile {
     private String type;
     boolean visited = false;
 
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
     public MazeTile(Point position, String type) {
         this.position = position;
         this.type = type;
