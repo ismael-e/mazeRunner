@@ -1,10 +1,9 @@
 import com.sun.xml.internal.bind.v2.TODO;
 
+import java.awt.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Created by Silver on 2/23/2017.
@@ -13,8 +12,6 @@ public class MazeImporter {
 
     private String[] mazeArray;
     List<String> mazeArrayList = new ArrayList<String>();
-    int startPoints[] = new int[2];
-    int endPoints[] = new int[2];
     int dimensions[] = new int[2];
     Maze maze;
 
@@ -45,17 +42,21 @@ public class MazeImporter {
         dimensions[1] = stringScanner.nextInt();
 
         stringScanner = new Scanner(startLine);
-        startPoints[0] = stringScanner.nextInt();
-        startPoints[1] = stringScanner.nextInt();
+        int startX = stringScanner.nextInt();
+        int startY = stringScanner.nextInt();
+        Point startPoint = new Point(startX,startY);
 
         stringScanner = new Scanner(endLine);
-        endPoints[0] = stringScanner.nextInt();
-        endPoints[1] = stringScanner.nextInt();
+        int endX = stringScanner.nextInt();
+        int endY = stringScanner.nextInt();
+        Point endPoint = new Point(endX,endY);
 
-
+        //skipping first three lines of the text file to
         Iterator mazeIterator = mazeArrayList.listIterator(3);
 
         ArrayList<MazeTile> mazeTiles = new ArrayList<MazeTile>();
+
+        HashMap<Point,MazeTile> tileMap = new HashMap<Point, MazeTile>();
 
         int lineIndex = 0;
         while(mazeIterator.hasNext()){
@@ -67,7 +68,7 @@ public class MazeImporter {
             for(int i=0; i < charArray.length ;i++){
                 char currentCharacter = charArray[i];
 
-                int[][] tilePosition = new int[lineIndex][i];
+                Point tilePosition = new Point(lineIndex,i);
                 String tileType;
 
                 if(currentCharacter =='1'){
@@ -79,24 +80,16 @@ public class MazeImporter {
                 }
 
                 MazeTile tile = new MazeTile(tilePosition,tileType);
-
+                tileMap.put(tilePosition,tile);
                 mazeTiles.add(tile);
             }
         }
-        maze = new Maze(dimensions,mazeTiles,startPoints,endPoints);
+//        maze = new Maze(dimensions,mazeTiles,startPoint,endPoint);
+        maze = new Maze(dimensions,tileMap,startPoint,endPoint);
 
-    }
-
-    public String[] getMazeArray() {
-        return mazeArray;
-    }
-
-    public void setMazeArray(String[] mazeArray) {
-        this.mazeArray = mazeArray;
     }
 
     public Maze getMaze() {
-
         return maze;
     }
 }

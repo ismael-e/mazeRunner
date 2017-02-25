@@ -1,21 +1,23 @@
+import java.awt.*;
+
 /**
  * Created by Silver on 2/23/2017.
  */
 public class MazeTile {
-    private int[][] position;
+    private Point position;
     private String type;
     boolean visited = false;
 
-    public MazeTile(int[][] position, String type) {
+    public MazeTile(Point position, String type) {
         this.position = position;
         this.type = type;
     }
 
-    public int[][] getPosition() {
+    public Point getPosition() {
         return position;
     }
 
-    public void setPosition(int[][] position) {
+    public void setPosition(Point position) {
         this.position = position;
     }
 
