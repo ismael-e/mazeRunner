@@ -51,9 +51,12 @@ public class Adventurer {
             Point fallBackPoint = getFallBack();
 
             if(fallBackPoint != null){
+                System.out.println("---Adventurer is stuck!---");
+                System.out.println("Falling back to X :" + fallBackPoint.x + " Y :" + fallBackPoint.y);
                 return moveTo(fallBackPoint);
             }
             else{
+                System.out.println("The Adventurer has nowhere left to go..... RIP");
                 return null;
             }
         }
