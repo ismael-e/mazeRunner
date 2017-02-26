@@ -1,18 +1,14 @@
-import sun.rmi.runtime.Log;
-
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.ListIterator;
 
 /**
  * Created by silver on 25/02/2017.
  */
+@SuppressWarnings("ALL")
 public class Adventurer {
     private final Maze maze;
-    private Point location;
     ArrayList<LogEntry> travelLog;
-    private boolean fork;
     private int moveCounter = 0;
 
     public Adventurer(Maze maze) {
@@ -20,18 +16,22 @@ public class Adventurer {
         travelLog = new ArrayList<LogEntry>();
     }
 
-    public void startQuest(Point location) {
-        moveTo(location);
+    public ArrayList<LogEntry> startQuest(Point location) {
+        return moveTo(location);
     }
 
     private ArrayList<LogEntry> moveTo(Point nextLocation) {
-
-        location = nextLocation;
+        System.out.println("---Adventurer makes a move---");
+        System.out.println("Moved to X :" + nextLocation.x + " Y :" + nextLocation.y);
+        Point location = nextLocation;
         moveCounter++;
-        fork = false;
+        boolean fork = false;
 
         //check if this is a win
-        if(location==maze.getEndPoint()){
+        if(location.equals(maze.getEndPoint())){
+
+            System.out.println("---SALVATION---");
+            logMove(moveCounter, location, fork);
             //adventure has completed his quest and returns his travel log
             return endQuest();
         }
@@ -39,22 +39,30 @@ public class Adventurer {
         //check the next tile's possible moves
         MazeTile[] moveOptions = getMoveOptions(location);
 
+        int moveCouner = 0;
+        for (int i=0; i<moveOptions.length; i++){
+            if (moveOptions[i]!=null){
+                moveCouner++;
+            }
+        }
+
         //no options means the current tile is a dead end.
-        if(moveOptions.length == 0){
+        if(moveCouner == 0){
             Point fallBackPoint = getFallBack();
+
             if(fallBackPoint != null){
-                moveTo(fallBackPoint);
+                return moveTo(fallBackPoint);
             }
             else{
                 return null;
             }
         }
         //if there is more than one move option then this tile is a fork
-        else if(moveOptions.length>1){
+        else if(moveCouner>1){
             fork = true;
         }
         //keep track of each move to show final solution and note down any forks in the tunnel to fall back to in event of a dead-end
-        logMove(moveCounter,location,fork);
+        logMove(moveCounter, location, fork);
 
         //mark the current tile as visited
         maze.markTile(location);
@@ -63,8 +71,8 @@ public class Adventurer {
         Point nextMove = chooseMove(moveOptions);
 
         //play again
-        moveTo(nextMove);
-        return null;
+        return moveTo(nextMove);
+
     }
 
     private Point getFallBack() {
@@ -72,11 +80,13 @@ public class Adventurer {
         ListIterator<LogEntry> entries = travelLog.listIterator(travelLog.size());
         while (entries.hasPrevious()){
             LogEntry currentEntry = entries.previous();
+            int entryIndex = travelLog.indexOf(currentEntry);
             if(currentEntry.isFork()){
-                //removing all steps to last fall back point
-                int entryIndex = travelLog.indexOf(currentEntry);
-                travelLog.remove(entryIndex);
                 return currentEntry.getLocation();
+            }
+            else{
+                //removing all steps to last fall back point
+                entries.remove();
             }
         }
         return null;
@@ -91,8 +101,13 @@ public class Adventurer {
         // dumb selection , choosing the first available
         // possibly could be improved by checking if any of the options is the exit
         //todo check the above later
-        Point result = moveOptions[0].getPosition();
-
+        Point result = null;
+        for (int i=0; i<moveOptions.length; i++){
+            if(moveOptions[i] != null ){
+                result  = moveOptions[i].getPosition();
+                return result;
+            }
+        }
         return result;
     }
 
@@ -105,8 +120,10 @@ public class Adventurer {
     private MazeTile[] getMoveOptions(Point location) {
         //get list of free tiles adjacent to the current tile
         MazeTile[] freeTiles = maze.getAdjacentTiles(location);
+//        MazeTile[] validMoves = MazeTile[];
+
         for(int i=0; i<freeTiles.length; i++){
-            if(freeTiles[i].isVisited()){
+            if( freeTiles[i] !=null && freeTiles[i].isVisited()){
                 //removing tiles which have already been visited from list of options
                 freeTiles[i] = null;
             }

@@ -3,6 +3,7 @@ import java.awt.*;
 /**
  * Created by Silver on 2/23/2017.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class MazeTile {
     private Point position;
     private String type;
@@ -12,8 +13,8 @@ public class MazeTile {
         return visited;
     }
 
-    public void setVisited(boolean visited) {
-        this.visited = visited;
+    public void setVisited() {
+        this.visited = true;
     }
 
     public MazeTile(Point position, String type) {
@@ -35,5 +36,22 @@ public class MazeTile {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String display() {
+        String result = null;
+        String type = getType();
+        switch (type) {
+            case "wall":
+                result = "#";
+                break;
+            case "tunnel":
+                result = " ";
+                break;
+            case "solution":
+                result = "x";
+                break;
+        }
+        return result;
     }
 }
