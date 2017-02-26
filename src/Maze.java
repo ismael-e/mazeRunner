@@ -35,9 +35,10 @@ public class Maze {
     public void solve() {
         //place the adventurer on the start tile and start his journey
         ArrayList<LogEntry> result = adventurer.startQuest(startPoint);
+
         if (result!=null){
             //process the log entries to generate a solution for the console.
-            displaySolution(result);
+            displaySolution(adventurer.travelLog);
         }
         else {
             //show a fail message

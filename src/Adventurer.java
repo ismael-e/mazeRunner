@@ -17,10 +17,28 @@ public class Adventurer {
     }
 
     public ArrayList<LogEntry> startQuest(Point location) {
-        return moveTo(location);
+        String status = "Processing";
+        Point currentPosition = location;
+
+        while (status.equals("Processing")){
+            currentPosition = moveTo(currentPosition);
+            if(currentPosition == null){
+                status = "Failed";
+            }
+            else if(currentPosition.equals(maze.getEndPoint())){
+                status = "Solved";
+            }
+
+        }
+
+        if (status.equals("Solved")){
+            return endQuest();
+        }
+
+        return null;
     }
 
-    private ArrayList<LogEntry> moveTo(Point nextLocation) {
+    private Point moveTo(Point nextLocation) {
         System.out.println("---Adventurer makes a move---");
         System.out.println("Moved to X :" + nextLocation.x + " Y :" + nextLocation.y);
         Point location = nextLocation;
@@ -29,15 +47,6 @@ public class Adventurer {
 
         //mark the current tile as visited
         maze.markTile(location);
-
-        //check if this is a win
-        if(location.equals(maze.getEndPoint())){
-
-            System.out.println("---SALVATION---");
-            //adventure has completed his quest and returns his travel log
-            logMove(moveCounter, location, fork);
-            return endQuest();
-        }
 
         //get all possible valid moves for current location
         MazeTile[] moveOptions = getMoveOptions(location);
@@ -61,16 +70,16 @@ public class Adventurer {
         //choose a move from the move counter
         Point nextMove = chooseMove(moveOptions);
 
-        //play again
-        return moveTo(nextMove);
+        //return selected next move
+        return nextMove;
 
     }
 
-    private ArrayList<LogEntry> attemptFallBack(Point fallBackPoint) {
+    private Point attemptFallBack(Point fallBackPoint) {
         if(fallBackPoint != null){
             System.out.println("---Adventurer is stuck!---");
             System.out.println("Falling back to X :" + fallBackPoint.x + " Y :" + fallBackPoint.y);
-            return moveTo(fallBackPoint);
+            return fallBackPoint;
         }
         else{
             System.out.println("The Adventurer has nowhere left to go..... RIP");
@@ -90,19 +99,18 @@ public class Adventurer {
 
     private Point getFallBack() {
         //preparing to iterate backwards to get last fall back point
+        Point result = null;
         ListIterator<LogEntry> entries = travelLog.listIterator(travelLog.size());
         while (entries.hasPrevious()){
             LogEntry currentEntry = entries.previous();
-            int entryIndex = travelLog.indexOf(currentEntry);
+
             if(currentEntry.isFork()){
-                return currentEntry.getLocation();
-            }
-            else{
-                //removing all steps to last fall back point
+                result = currentEntry.getLocation();
                 entries.remove();
+                break;
             }
         }
-        return null;
+        return result;
     }
 
     private ArrayList<LogEntry> endQuest() {
