@@ -9,47 +9,49 @@ import java.util.List;
 @SuppressWarnings("DefaultFileTemplate")
 public class MazeImporter {
 
-    private String[] mazeArray;
-    List<String> mazeArrayList = new ArrayList<String>();
-    int dimensions[] = new int[2];
-    Maze maze;
+    public static final int SizeLine = 0;
+    public static final int StartLine = 1;
+    public static final int EndLine = 2;
+    public static final int MazeBodyLine = 3;
+    private List<String> mazeArrayList = new ArrayList<String>();
+    private Maze maze;
 
     public MazeImporter(String fileName) throws FileNotFoundException {
 
-        File mazeFile = new File("src/mazeFiles/"+ fileName);
-        BufferedReader lineReader = new BufferedReader(new FileReader(mazeFile));
-        String readLine;
-
-        //loading maze file from .txt to an array list
-        try {
-            while ((readLine = lineReader.readLine()) != null) {
-                mazeArrayList.add(readLine);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //load text file into memory as an ArrayList
+        loadTextFile(fileName);
 
         //loading up maze parameters to create a maze object
-        String sizeLine = mazeArrayList.get(0);
-        String startLine = mazeArrayList.get(1);
-        String endLine = mazeArrayList.get(2);
+        int[] dimensions = getMazeDimensions(mazeArrayList.get(SizeLine));
+        Point startPoint = getCoordinatePoint(mazeArrayList.get(StartLine));
+        Point endPoint = getCoordinatePoint(mazeArrayList.get(EndLine));
 
+        //process the maze body into a map
+        HashMap<Point, MazeTile> mazeMap = mapMazeBody();
+
+        maze = new Maze(dimensions,mazeMap,startPoint,endPoint);
+    }
+
+    private int[] getMazeDimensions(String sizeLine) {
         Scanner stringScanner = new Scanner(sizeLine);
+        int[] dimensions = new int[2];
         dimensions[0] = stringScanner.nextInt();
         dimensions[1] = stringScanner.nextInt();
 
-        stringScanner = new Scanner(startLine);
-        int startX = stringScanner.nextInt();
-        int startY = stringScanner.nextInt();
-        Point startPoint = new Point(startX,startY);
+        return dimensions;
+    }
 
+    private Point getCoordinatePoint(String endLine) {
+        Scanner stringScanner;
         stringScanner = new Scanner(endLine);
         int endX = stringScanner.nextInt();
         int endY = stringScanner.nextInt();
-        Point endPoint = new Point(endX,endY);
+        return new Point(endX,endY);
+    }
 
+    private HashMap<Point, MazeTile> mapMazeBody() {
         //skipping first three lines of the text file
-        Iterator mazeIterator = mazeArrayList.listIterator(3);
+        Iterator mazeIterator = mazeArrayList.listIterator(MazeBodyLine);
 
         HashMap<Point,MazeTile> tileMap = new HashMap<Point, MazeTile>();
         int lineIndex = 0;
@@ -62,10 +64,9 @@ public class MazeImporter {
                 char currentCharacter = charArray[i];
 
                 Point tilePosition = new Point(i,lineIndex);
-
                 String tileType;
 
-                if(currentCharacter =='1'){
+                if(currentCharacter == '1'){
                     //Todo change the wall and tunnel to constants when i get some time
                     tileType = "wall";
                 }
@@ -78,8 +79,22 @@ public class MazeImporter {
             }
             lineIndex++;
         }
-        maze = new Maze(dimensions,tileMap,startPoint,endPoint);
+        return tileMap;
+    }
 
+    private void loadTextFile(String fileName) throws FileNotFoundException {
+        File mazeFile = new File("src/mazeFiles/"+ fileName);
+        BufferedReader lineReader = new BufferedReader(new FileReader(mazeFile));
+        String readLine;
+
+        //loading maze file from .txt to an array list
+        try {
+            while ((readLine = lineReader.readLine()) != null) {
+                mazeArrayList.add(readLine);
+            }
+        } catch (IOException e) {
+            System.out.println("File could not be located, check path and filename");
+        }
     }
 
     public Maze getMaze() {

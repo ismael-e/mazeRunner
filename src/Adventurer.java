@@ -27,48 +27,36 @@ public class Adventurer {
         moveCounter++;
         boolean fork = false;
 
+        //mark the current tile as visited
+        maze.markTile(location);
+
         //check if this is a win
         if(location.equals(maze.getEndPoint())){
 
             System.out.println("---SALVATION---");
-            logMove(moveCounter, location, fork);
             //adventure has completed his quest and returns his travel log
+            logMove(moveCounter, location, fork);
             return endQuest();
         }
 
-        //check the next tile's possible moves
+        //get all possible valid moves for current location
         MazeTile[] moveOptions = getMoveOptions(location);
 
-        int moveCouner = 0;
-        for (int i=0; i<moveOptions.length; i++){
-            if (moveOptions[i]!=null){
-                moveCouner++;
-            }
-        }
+        int moveCouner = countValidMoves(moveOptions);
 
-        //no options means the current tile is a dead end.
+        //no moves available means the current tile is a dead end.
         if(moveCouner == 0){
+            //get the coordinates of the last fall back location to retry
             Point fallBackPoint = getFallBack();
-
-            if(fallBackPoint != null){
-                System.out.println("---Adventurer is stuck!---");
-                System.out.println("Falling back to X :" + fallBackPoint.x + " Y :" + fallBackPoint.y);
-                return moveTo(fallBackPoint);
-            }
-            else{
-                System.out.println("The Adventurer has nowhere left to go..... RIP");
-                return null;
-            }
+            return attemptFallBack(fallBackPoint);
         }
         //if there is more than one move option then this tile is a fork
-        else if(moveCouner>1){
+        else if(moveCouner > 1){
             fork = true;
         }
+
         //keep track of each move to show final solution and note down any forks in the tunnel to fall back to in event of a dead-end
         logMove(moveCounter, location, fork);
-
-        //mark the current tile as visited
-        maze.markTile(location);
 
         //choose a move from the move counter
         Point nextMove = chooseMove(moveOptions);
@@ -76,6 +64,28 @@ public class Adventurer {
         //play again
         return moveTo(nextMove);
 
+    }
+
+    private ArrayList<LogEntry> attemptFallBack(Point fallBackPoint) {
+        if(fallBackPoint != null){
+            System.out.println("---Adventurer is stuck!---");
+            System.out.println("Falling back to X :" + fallBackPoint.x + " Y :" + fallBackPoint.y);
+            return moveTo(fallBackPoint);
+        }
+        else{
+            System.out.println("The Adventurer has nowhere left to go..... RIP");
+            return null;
+        }
+    }
+
+    private int countValidMoves(MazeTile[] moveOptions) {
+        int moveCouner = 0;
+        for (int i=0; i<moveOptions.length; i++){
+            if (moveOptions[i]!=null){
+                moveCouner++;
+            }
+        }
+        return moveCouner;
     }
 
     private Point getFallBack() {
@@ -101,9 +111,7 @@ public class Adventurer {
     }
 
     private Point chooseMove(MazeTile[] moveOptions) {
-        // dumb selection , choosing the first available
-        // possibly could be improved by checking if any of the options is the exit
-        //todo check the above later
+        // dumb selection , choosing the first available valid move or return a null
         Point result = null;
         for (int i=0; i<moveOptions.length; i++){
             if(moveOptions[i] != null ){
@@ -123,7 +131,6 @@ public class Adventurer {
     private MazeTile[] getMoveOptions(Point location) {
         //get list of free tiles adjacent to the current tile
         MazeTile[] freeTiles = maze.getAdjacentTiles(location);
-//        MazeTile[] validMoves = MazeTile[];
 
         for(int i=0; i<freeTiles.length; i++){
             if( freeTiles[i] !=null && freeTiles[i].isVisited()){

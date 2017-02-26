@@ -13,14 +13,19 @@ public class Maze {
     private int height,width;
     private Point startPoint;
     private Point endPoint;
-    private HashMap<Point, MazeTile> Map;
+    private HashMap<Point, MazeTile> mazeMap;
 
-    public Maze(int[] dimension, HashMap<Point, MazeTile> tileMap, Point startPoint, Point endPoint) {
-        setDimensions(dimension[0], dimension[1]);
-        setStartPoint(startPoint);
-        setEndPoint(endPoint);
-        this.Map = tileMap;
+    public Maze(int[] dimension, HashMap<Point, MazeTile> tileMap, Point startCoordinates, Point endCoordinates) {
+
+        height = dimension[1];
+        width = dimension[0];
+        startPoint = startCoordinates;
+        endPoint = endCoordinates;
+        mazeMap = tileMap;
+
         adventurer = new Adventurer(this);
+
+        //providing Feedback
         System.out.println("---Maze loaded---");
         System.out.println("Size :" + getWidth() + " BY " + getHeight() );
         System.out.println("Entrance X :" + getStartPoint().x + " Y :" +getStartPoint().y);
@@ -64,7 +69,7 @@ public class Maze {
     }
 
     private MazeTile getTile(Point reference){
-        MazeTile result = Map.get(reference);
+        MazeTile result = mazeMap.get(reference);
         return result;
     }
 
@@ -90,9 +95,9 @@ public class Maze {
 
     public void markTile(Point location) {
         //marks tile as has been visited
-        MazeTile tile = Map.get(location);
+        MazeTile tile = mazeMap.get(location);
         tile.setVisited();
-        Map.put(location,tile);
+        mazeMap.put(location,tile);
     }
 
     public void markSolution(ArrayList<LogEntry> result) {
@@ -102,12 +107,15 @@ public class Maze {
             LogEntry currentEntry = solution.next();
             Point location = currentEntry.getLocation();
             //marks tile as part of the solution
-            MazeTile tile = Map.get(location);
+            MazeTile tile = mazeMap.get(location);
             tile.setType("solution");
-            Map.put(location,tile);
+            mazeMap.put(location,tile);
         }
     }
 
+    public void setMazeMap(HashMap<Point, MazeTile> mazeMap) {
+        this.mazeMap = mazeMap;
+    }
     public int getHeight() {
         return height;
     }
