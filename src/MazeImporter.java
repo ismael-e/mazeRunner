@@ -16,8 +16,42 @@ import java.util.List;
     private final List<String> mazeArrayList = new ArrayList<String>();
     private Maze maze;
 
-    public MazeImporter(String fileName) throws FileNotFoundException {
+    public MazeImporter() throws FileNotFoundException,InputMismatchException,ArrayIndexOutOfBoundsException {
 
+        List<String> allTextFiles = new ArrayList<String>();
+        File directory = new File("src/mazeFiles/");
+        int fileCounter=0;
+        System.out.println("List of files in the mazeFiles directory ");
+        for (File file : directory.listFiles()) {
+            if (file.getName().endsWith((".txt"))) {
+                String fileName = file.getName();
+                allTextFiles.add(file.getName());
+                System.out.println("*** "+ fileCounter +" " + fileName);
+                fileCounter++;
+            }
+        }
+        System.out.println("End of List");
+        System.out.println("Please select a maze to begin the adventure by entering its number and hitting enter");
+
+        int userChoice = getUserChoice();
+        try{
+            importMaze(allTextFiles.get(userChoice));
+        }catch (InputMismatchException e){
+            System.out.println("Please enter only numbers.");
+        }catch (ArrayIndexOutOfBoundsException e){
+            System.out.println("Please enter only numbers from the list above.");
+        }
+
+    }
+
+    private int getUserChoice() {
+        int userChoice;
+        Scanner userInput = new Scanner(System.in);
+        userChoice = userInput.nextInt();
+        return userChoice;
+    }
+
+    private void importMaze(String fileName) throws FileNotFoundException {
         //load text file into memory as an ArrayList
         loadTextFile(fileName);
 
