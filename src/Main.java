@@ -1,6 +1,6 @@
 import java.io.FileNotFoundException;
 
-public class Main {
+class Main {
 
     public static void main(String[] args)  {
         System.out.println("Hello World! Preparing to read input.txt");

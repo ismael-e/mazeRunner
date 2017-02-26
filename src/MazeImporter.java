@@ -7,13 +7,13 @@ import java.util.List;
  * Created by Silver on 2/23/2017.
  */
 @SuppressWarnings("DefaultFileTemplate")
-public class MazeImporter {
+ class MazeImporter {
 
-    public static final int SizeLine = 0;
-    public static final int StartLine = 1;
-    public static final int EndLine = 2;
-    public static final int MazeBodyLine = 3;
-    private List<String> mazeArrayList = new ArrayList<String>();
+    private static final int SizeLine = 0;
+    private static final int StartLine = 1;
+    private static final int EndLine = 2;
+    private static final int MazeBodyLine = 3;
+    private final List<String> mazeArrayList = new ArrayList<String>();
     private Maze maze;
 
     public MazeImporter(String fileName) throws FileNotFoundException {

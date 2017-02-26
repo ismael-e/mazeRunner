@@ -5,9 +5,9 @@ import java.awt.*;
  */
 @SuppressWarnings("DefaultFileTemplate")
 public class MazeTile {
-    private Point position;
+    private final Point position;
     private String type;
-    boolean visited = false;
+    private boolean visited = false;
 
     public boolean isVisited() {
         return visited;
@@ -24,10 +24,6 @@ public class MazeTile {
 
     public Point getPosition() {
         return position;
-    }
-
-    public void setPosition(Point position) {
-        this.position = position;
     }
 
     public String getType() {

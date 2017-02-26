@@ -9,11 +9,12 @@ import java.util.Iterator;
 @SuppressWarnings("DefaultFileTemplate")
 public class Maze {
 
-    private Adventurer adventurer;
-    private int height,width;
-    private Point startPoint;
-    private Point endPoint;
-    private HashMap<Point, MazeTile> mazeMap;
+    private final Adventurer adventurer;
+    private final int height;
+    private final int width;
+    private final Point startPoint;
+    private final Point endPoint;
+    private final HashMap<Point, MazeTile> mazeMap;
 
     public Maze(int[] dimension, HashMap<Point, MazeTile> tileMap, Point startCoordinates, Point endCoordinates) {
 
@@ -57,7 +58,7 @@ public class Maze {
         //use the dimensions of the maze as key to pull out the marked tiles from the map
 
         for (int y=0; y<getHeight(); y++){
-            String solutionLine = new String();
+            String solutionLine = "";
 
             for (int x=0; x<getWidth(); x++){
 //                System.out.println("sol : x:"+x+" y:"+y);
@@ -70,8 +71,7 @@ public class Maze {
     }
 
     private MazeTile getTile(Point reference){
-        MazeTile result = mazeMap.get(reference);
-        return result;
+        return mazeMap.get(reference);
     }
 
     public MazeTile[] getAdjacentTiles(Point location) {
@@ -101,7 +101,7 @@ public class Maze {
         mazeMap.put(location,tile);
     }
 
-    public void markSolution(ArrayList<LogEntry> result) {
+    private void markSolution(ArrayList<LogEntry> result) {
         Iterator<LogEntry> solution = result.iterator();
 
         while(solution.hasNext()) {
@@ -114,9 +114,6 @@ public class Maze {
         }
     }
 
-    public void setMazeMap(HashMap<Point, MazeTile> mazeMap) {
-        this.mazeMap = mazeMap;
-    }
     public int getHeight() {
         return height;
     }
@@ -126,16 +123,7 @@ public class Maze {
     public Point getEndPoint() {
         return endPoint;
     }
-    public void setEndPoint(Point endPoint) {
-        this.endPoint = endPoint;
-    }
-    public void setStartPoint(Point startPoint) {
-        this.startPoint = startPoint;
-    }
-    public void setDimensions(int width, int height) {
-        this.height = height;
-        this.width = width;
-    }
+
     public Point getStartPoint() {
         return startPoint;
     }
