@@ -114,17 +114,24 @@ public class Adventurer {
     }
 
     private ArrayList<LogEntry> endQuest() {
-        System.out.println("Exit located");
+        System.out.println("Exit located | Journey took " + moveCounter + " steps ");
         return travelLog;
     }
 
     private Point chooseMove(MazeTile[] moveOptions) {
         // dumb selection , choosing the first available valid move or return a null
         Point result = null;
+        Double distance = null;
+
         for (int i=0; i<moveOptions.length; i++){
             if(moveOptions[i] != null ){
-                result  = moveOptions[i].getPosition();
-                return result;
+                //Calculate which move takes the adventurer closer to the exit
+                Double currentDistance = moveOptions[i].getPosition().distance(maze.getEndPoint());
+                if(distance == null || distance > currentDistance){
+                    distance = currentDistance;
+                    result  = moveOptions[i].getPosition();
+                }
+//                return result;
             }
         }
         return result;
