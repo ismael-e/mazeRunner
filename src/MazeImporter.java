@@ -35,7 +35,19 @@ import java.util.List;
 
         int userChoice = getUserChoice();
         try{
-            importMaze(allTextFiles.get(userChoice));
+            importMaze("src/mazeFiles/" + allTextFiles.get(userChoice));
+        }catch (InputMismatchException e){
+            System.out.println("Please enter only numbers.");
+        }catch (ArrayIndexOutOfBoundsException e){
+            System.out.println("Please enter only numbers from the list above.");
+        }
+
+    }
+
+    public MazeImporter(String testResource) throws FileNotFoundException,InputMismatchException,ArrayIndexOutOfBoundsException {
+
+        try{
+            importMaze(testResource);
         }catch (InputMismatchException e){
             System.out.println("Please enter only numbers.");
         }catch (ArrayIndexOutOfBoundsException e){
@@ -51,6 +63,7 @@ import java.util.List;
         return userChoice;
     }
 
+    //public accessor to help with testing
     private void importMaze(String fileName) throws FileNotFoundException {
         //load text file into memory as an ArrayList
         loadTextFile(fileName);
@@ -102,10 +115,10 @@ import java.util.List;
 
                 if(currentCharacter == '1'){
                     //Todo change the wall and tunnel to constants when i get some time
-                    tileType = "wall";
+                    tileType = MazeTile.TILE_TYPE_WALL;
                 }
                 else{
-                    tileType = "tunnel";
+                    tileType = MazeTile.TILE_TYPE_TUNNEL;
                 }
 
                 MazeTile tile = new MazeTile(tilePosition,tileType);
@@ -117,7 +130,7 @@ import java.util.List;
     }
 
     private void loadTextFile(String fileName) throws FileNotFoundException {
-        File mazeFile = new File("src/mazeFiles/"+ fileName);
+        File mazeFile = new File(fileName);
         BufferedReader lineReader = new BufferedReader(new FileReader(mazeFile));
         String readLine;
 

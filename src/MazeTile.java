@@ -5,6 +5,9 @@ import java.awt.*;
  */
 @SuppressWarnings("DefaultFileTemplate")
 public class MazeTile {
+    public static final String TILE_TYPE_WALL = "wall";
+    public static final String TILE_TYPE_TUNNEL = "tunnel";
+    public static final String TILE_TYPE_SOLUTION = "solution";
     private final Point position;
     private String type;
     private boolean visited = false;
@@ -38,13 +41,13 @@ public class MazeTile {
         String result = null;
         String type = getType();
         switch (type) {
-            case "wall":
+            case TILE_TYPE_WALL:
                 result = "#";
                 break;
-            case "tunnel":
+            case TILE_TYPE_TUNNEL:
                 result = " ";
                 break;
-            case "solution":
+            case TILE_TYPE_SOLUTION:
                 result = "x";
                 break;
         }
