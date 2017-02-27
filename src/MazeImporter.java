@@ -16,7 +16,7 @@ import java.util.List;
     private final List<String> mazeArrayList = new ArrayList<String>();
     private Maze maze;
 
-    public MazeImporter() throws FileNotFoundException,InputMismatchException,ArrayIndexOutOfBoundsException {
+    public MazeImporter() throws FileNotFoundException,InputMismatchException {
 
         List<String> allTextFiles = new ArrayList<String>();
         File directory = new File("src/mazeFiles/");
@@ -33,12 +33,13 @@ import java.util.List;
         System.out.println("End of List");
         System.out.println("Please select a maze to begin the adventure by entering its number and hitting enter");
 
-        int userChoice = getUserChoice();
+
         try{
+            int userChoice = getUserChoice();
             importMaze("src/mazeFiles/" + allTextFiles.get(userChoice));
         }catch (InputMismatchException e){
             System.out.println("Please enter only numbers.");
-        }catch (ArrayIndexOutOfBoundsException e){
+        }catch (IndexOutOfBoundsException e){
             System.out.println("Please enter only numbers from the list above.");
         }
 
@@ -130,17 +131,16 @@ import java.util.List;
     }
 
     private void loadTextFile(String fileName) throws FileNotFoundException {
-        File mazeFile = new File(fileName);
-        BufferedReader lineReader = new BufferedReader(new FileReader(mazeFile));
-        String readLine;
-
         //loading maze file from .txt to an array list
         try {
+            File mazeFile = new File(fileName);
+            BufferedReader lineReader = new BufferedReader(new FileReader(mazeFile));
+            String readLine;
             while ((readLine = lineReader.readLine()) != null) {
                 mazeArrayList.add(readLine);
             }
         } catch (IOException e) {
-            System.out.println("File could not be located, check path and filename");
+            System.out.println("IO ERROR > Something went wrong when trying to read the maze file, check the path and file name");
         }
     }
 

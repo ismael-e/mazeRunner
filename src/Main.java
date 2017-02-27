@@ -1,5 +1,3 @@
-import java.io.FileNotFoundException;
-
 class Main {
 
     public static void main(String[] args)  {
@@ -10,8 +8,8 @@ class Main {
             Maze maze = mazeImporter.getMaze();
             maze.solve();
 
-        } catch (FileNotFoundException e) {
-            System.out.println("IO ERROR > Something went wrong when trying to read the maze file, check the path and file name");
+        } catch (Exception e) {
+            System.out.println("An Error has occurred, please check the instructions and try again ");
         }
 
     }
