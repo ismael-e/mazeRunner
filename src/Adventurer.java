@@ -103,10 +103,10 @@ public class Adventurer {
         ListIterator<LogEntry> entries = travelLog.listIterator(travelLog.size());
         while (entries.hasPrevious()){
             LogEntry currentEntry = entries.previous();
-
-            if(currentEntry.isFork()){
+            entries.remove();
+            if(currentEntry.isFork()) {
                 result = currentEntry.getLocation();
-                entries.remove();
+
                 break;
             }
         }
