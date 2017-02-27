@@ -26,6 +26,8 @@ public class Adventurer {
                 status = "Failed";
             }
             else if(currentPosition.equals(maze.getEndPoint())){
+                maze.markTile(currentPosition);
+                logMove(moveCounter,currentPosition,false);
                 status = "Solved";
             }
 
